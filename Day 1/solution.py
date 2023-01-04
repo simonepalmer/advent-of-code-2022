@@ -40,7 +40,11 @@ def get_sublist_sums(processed_data_list): # gets the sums of all sublists
 
 def print_highest_sublist_sum(list): # Sorts the list by sum and prints the highest sum
     list.sort()
-    print(list[-1],'\n')
+    print("The sublist with the highest sum is:", list[-1],'\n')
+
+def print_answer_for_part_two(list):
+    list.sort()
+    print("So the sum of the three highest are:", sum(list[-3:]), '\n')
 
 def main():
     data = import_data()
@@ -48,18 +52,11 @@ def main():
     processed_data_list = process_data_list(data_list)
     sums_of_sublists = get_sublist_sums(processed_data_list)
     print_highest_sublist_sum(sums_of_sublists)
-
-###################################################################################################
-
-    #Part 2
-    sums_of_sublists.sort()
+    print_answer_for_part_two(sums_of_sublists)
 
     #Please explain why the thing described in the two following printed rows happens! :)
     print("from index -3 to but not including 0 '[-3:0]' seems to return: \"", sums_of_sublists[-3:0], "\" why is that?", sep='')
     print("But from index -3 to the end [-3:] returns the last three: \"",sums_of_sublists[-3:], "\" as expected", sep='')
-    
-    top_three = sum(sums_of_sublists[-3:])
-    print("\nSo the sum of the three highest are:", top_three)
 
 if __name__ == "__main__":
     main()
