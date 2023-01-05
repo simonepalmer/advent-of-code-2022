@@ -11,41 +11,20 @@
 
 from itertools import groupby
 
-def import_data(): #import the data from the txt file
+def import_data(): #Import the data and make it into a list seperated by '\n' (new line)
     data = open("input.txt")
-    return data
-
-def convert_data_to_list(data): #read data as a string and convert it to a list (on new line)
     data_str = data.read()
     data_list = data_str.split('\n')
     return data_list
-    # Is there not a way to import it like a list right away in some cleaver way?
-    # for example: data_list = data.read(data.split('\n'))? Although I just took this
-    # out of my ass and haven't tested it but I just assume it won't work?
 
-def process_data_list(data_list): # process the list into sublists seperated by empty list indexes
-    # processed_data_list = [list(sublist) for element, sublist in groupby(data_list, key = bool) if element]
-    processed_data_list = []
-    for element, sublist in groupby(data_list, key=bool):
-        if element:
-            processed_data_list.append(list(sublist))
-    return processed_data_list
-
-def get_sublist_sums(processed_data_list): # gets the sums of all sublists
-    # sums_of_sublists = [sum(int(x) for x in sublist) for sublist in processed_data_list]
-    sums_of_sublists = []
-    for sublist in processed_data_list:
-        sublist_sum = 0
-        for x in sublist:
-            sublist_sum += int(x)
-        sums_of_sublists.append(sublist_sum)
+def process_data_list(data_list):
+    # Creates a new list grouping sequential not empty indexes together seperated by the empty indexes (which are removed)
+    processed_data_list = [list(sublist) for not_empty, sublist in groupby(data_list, key = bool) if not_empty]
+    # Converting all sublists in processed_data_list from str to int and and make a new list with the sum of all sublists
+    sums_of_sublists = [sum(int((x)) for x in sublist) for sublist in processed_data_list]
     return sums_of_sublists
-    # Can process_data_list() and get_sublist_sums() somehow be combined make a list of
-    # the sums of the sublists in one step instead of two?
-    # I feel that these are the parts I have the weakest understanding of and can't really
-    # picture how that would look. (I don't mean just having line 25 and 33 after each other)
 
-def print_highest_sublist_sum(list): # Sorts the list by sum and prints the highest sum
+def print_answer_for_part_one(list): # Sorts the list by sum and prints the highest sum
     list.sort()
     print("The sublist with the highest sum is:", list[-1],'\n')
 
@@ -54,14 +33,12 @@ def print_answer_for_part_two(list): # Prints the sum of the three highest subli
     print("So the sum of the three highest are:", sum(list[-3:]), '\n')
 
 def main():
-    data = import_data()
-    data_list = convert_data_to_list(data)
-    processed_data_list = process_data_list(data_list)
-    sums_of_sublists = get_sublist_sums(processed_data_list)
-    print_highest_sublist_sum(sums_of_sublists)
+    data_list = import_data()
+    sums_of_sublists = process_data_list(data_list)
+    print_answer_for_part_one(sums_of_sublists)
     print_answer_for_part_two(sums_of_sublists)
 
-    #Please explain why the thing described in the two following printed rows happens! :)
+    # Please explain why the thing described in the two following printed rows happens! :)
     print("from index -3 to but not including 0 '[-3:0]' seems to return an empty bracket \"[]\" like this: ", sums_of_sublists[-3:0], ", why is that?", sep='')
     print("But from index -3 to the end [-3:] returns the last three: \"",sums_of_sublists[-3:], "\" as expected", sep='')
 
